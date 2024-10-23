@@ -1,26 +1,44 @@
-COURSE = 
+.PHONY: build pin push test update
 
-.PHONY: all clean
+build:
+	nix build . .#static .#pandoc $(NIX_EXTRA_OPTS)
 
-all: help
+pin:
+	nix build .#static $(NIX_EXTRA_OPTS)
+	cachix pin pandoc-crossref $$(git describe --tags) $$(nix eval --raw .#static $(NIX_EXTRA_OPTS)) -a bin/pandoc-crossref --keep-revisions 1
 
-help:
-	@echo 'Usage:'
-	@echo '  make <target>'
-	@echo 
-	@echo 'Targets:'
-	@grep -E '^[a-zA-Z_0-9.-]+:.*?##.*$$' $(MAKEFILE_LIST) | grep -v '###' | sort | cut -d: -f1- | awk 'BEGIN {FS = ":.*?##"}; {printf "  \033[36m%-30s\033[0m %s\n", $$1, $$2}'
-	@grep -E '^###.*' $(MAKEFILE_LIST) | cut -d' ' -f2- | awk 'BEGIN {FS = "###"}; {printf "%s\n", $$1, $$2}'
-	@grep -E '^[a-zA-Z_0-9.-]+:.*?###.*$$' $(MAKEFILE_LIST) | sort | cut -d: -f2- | awk 'BEGIN {FS = ":.*?###"}; {printf "  \033[36m%-30s\033[0m %s\n", $$1, $$2}'
-	@echo
+push:
+	nix build . .#static .#pandoc $(NIX_EXTRA_OPTS) --json \
+		| jq -r '.[].outputs | to_entries[].value' \
+		| cachix push pandoc-crossref
 
-list:	## List of courses
-	@./config/script/list-courses
+test:
+	nix run .#test $(NIX_EXTRA_OPTS) && nix run .#test-integrative $(NIX_EXTRA_OPTS)
 
-prepare:	## Generate directories structure
-	@./config/script/prepare
-	@touch prepare
+regen-test-fixtures:
+	nix develop --command bash -c './mkcheck.sh && ./mkinttest.sh'
 
-submodule:	## Update submules
-	git submodule update --init --recursive
-	git submodule foreach 'git fetch origin; git checkout $$(git rev-parse --abbrev-ref HEAD); git reset --hard origin/$$(git rev-parse --abbrev-ref HEAD); git submodule update --recursive; git clean -dfx'
+cabal.project.freeze: .github/workflows/haskell.yml
+	rm cabal.project.freeze || true
+	cabal freeze --constraint pandoc==$$(yq '.env.PANDOC_VERSION' .github/workflows/haskell.yml)
+	sed -i '/zlib .* +pkg-config/ d' cabal.project.freeze
+
+stack.yaml: cabal.project.freeze stack.template.yaml
+	echo "# THIS FILE IS GENERATED, DO NOT EDIT DIRECTLY" > stack.yaml
+	cat stack.template.yaml >> stack.yaml
+	grep -Ev 'any\.(ghc-boot-th|ghc-prim|rts|base) ' cabal.project.freeze \
+		| sed -rn 's/^\s*any.([^ ]*) ==([^, ]*)([^,]*),?$$/- \1-\2/p' \
+		>> stack.yaml
+
+flake.lock: .github/workflows/haskell.yml
+	nix flake update
+
+stack.yaml.lock: .github/workflows/haskell.yml stack.yaml
+	# need this to update stack.yaml.lock, feel free to kill after that
+	stack build --no-system-ghc --no-install-ghc || true
+
+pandoc-crossref.cabal: package.yaml
+	# just use stack to generate the cabalfile
+	stack build --no-system-ghc --no-install-ghc || true
+
+update: stack.yaml flake.lock stack.yaml.lock
