@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudyHub RUDN</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7ff;
+            color: #212529;
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #0055a5, #0d47a1);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .logo i {
+            font-size: 2rem;
+            color: #ff6f00;
+        }
+
+        .student-info {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .student-info h3 {
+            margin-bottom: 5px;
+            color: white;
+        }
+
+        .student-info .group {
+            color: #ff6f00;
+            font-weight: bold;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+            margin-top: 10px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+
+        nav a:hover {
+            color: #ff6f00;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .hero {
+            padding: 60px 0;
+            background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9));
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #0d47a1;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            color: #555;
+        }
+
+        .features {
+            padding: 60px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+            color: #0d47a1;
+            font-size: 2.2rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-align: center;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-card i {
+            font-size: 2.8rem;
+            color: #0055a5;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            margin-bottom: 15px;
+            color: #0d47a1;
+        }
+
+        .subjects {
+            padding: 60px 0;
+            background-color: #f0f3ff;
+        }
+
+        .subjects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 25px;
+        }
+
+        .subject-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.07);
+            transition: transform 0.3s;
+        }
+
+        .subject-card:hover {
+            transform: translateY(-8px);
+        }
+
+        .subject-icon {
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #0055a5, #0d47a1);
+            color: white;
+            font-size: 3rem;
+        }
+
+        .subject-content {
+            padding: 20px;
+        }
+
+        .subject-content h3 {
+            margin-bottom: 10px;
+            color: #0d47a1;
+        }
+
+        .subject-content p {
+            color: #666;
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+        }
+
+        .btn-subject {
+            display: inline-block;
+            background-color: #0055a5;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: background-color 0.3s;
+        }
+
+        .btn-subject:hover {
+            background-color: #0d47a1;
+        }
+
+        .study-timer {
+            padding: 60px 0;
+            text-align: center;
+        }
+
+        .timer-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        .timer-display {
+            font-size: 4rem;
+            font-weight: 700;
+            color: #0d47a1;
+            margin: 30px 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        .timer-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .timer-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .timer-btn.start {
+            background-color: #4caf50;
+            color: white;
+        }
+
+        .timer-btn.pause {
+            background-color: #ff9800;
+            color: white;
+        }
+
+        .timer-btn.reset {
+            background-color: #e0e0e0;
+            color: #212529;
+        }
+
+        .timer-btn:hover {
+            opacity: 0.9;
+            transform: scale(1.05);
+        }
+
+        .flashcards {
+            padding: 60px 0;
+            background-color: #f0f3ff;
+        }
+
+        .flashcard-container {
+            max-width: 500px;
+            margin: 0 auto;
+            perspective: 1000px;
+        }
+
+        .flashcard {
+            width: 100%;
+            height: 300px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.8s;
+            cursor: pointer;
+            margin-bottom: 30px;
+        }
+
+        .flashcard.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .flashcard-front, .flashcard-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .flashcard-front {
+            background: linear-gradient(135deg, #0055a5, #0d47a1);
+            color: white;
+            font-size: 1.5rem;
+            text-align: center;
+        }
+
+        .flashcard-back {
+            background: white;
+            color: #212529;
+            transform: rotateY(180deg);
+            font-size: 1.2rem;
+            text-align: center;
+        }
+
+        .flashcard-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .student-photo-section {
+            padding: 60px 0;
+            text-align: center;
+        }
+
+        .photo-container {
+            display: inline-block;
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        .photo-frame {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 5px solid #0055a5;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(135deg, #0055a5, #0d47a1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 4rem;
+        }
+
+        .photo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .upload-btn {
+            background: #ff6f00;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 20px;
+            transition: background 0.3s;
+        }
+
+        .upload-btn:hover {
+            background: #e65c00;
+        }
+
+        footer {
+            background-color: #212529;
+            color: white;
+            padding: 60px 0 30px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 20px;
+            color: #ff6f00;
+            font-size: 1.3rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-section a {
+            color: #ddd;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: #ff6f00;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid #444;
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            nav {
+                width: 100%;
+                display: none;
+            }
+
+            nav.active {
+                display: block;
+            }
+
+            nav ul {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+                position: absolute;
+                top: 20px;
+                right: 20px;
+            }
+
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .timer-display {
+                font-size: 3rem;
+            }
+
+            .feature-card, .subject-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <i class="fas fa-graduation-cap"></i>
+                <span>StudyHub RUDN</span>
+            </div>
+            
+            <div class="student-info">
+                <h3>Жозе Рамос Домингуш</h3>
+                <p class="group">Группа: НПИбд-03-24</p>
+                <p>2 курс бакалавриата</p>
+            </div>
+            
+            <button class="mobile-menu-btn" id="menuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            <nav id="mainNav">
+                <ul>
+                    <li><a href="#home"><i class="fas fa-home"></i> Главная</a></li>
+                    <li><a href="#subjects"><i class="fas fa-book"></i> Предметы</a></li>
+                    <li><a href="#timer"><i class="fas fa-clock"></i> Таймер</a></li>
+                    <li><a href="#flashcards"><i class="fas fa-layer-group"></i> Карточки</a></li>
+                    <li><a href="#photo"><i class="fas fa-camera"></i> Фото</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero" id="home">
+        <div class="container">
+            <h1>StudyHub RUDN - Учебный портал</h1>
+            <p>Платформа для организации учебного процесса студентов РУДН</p>
+        </div>
+    </section>
+
+    <section class="subjects" id="subjects">
+        <div class="container">
+            <h2 class="section-title">📚 Предметы 2 курса</h2>
+            <div class="subjects-grid">
+                <div class="subject-card">
+                    <div class="subject-icon">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <div class="subject-content">
+                        <h3>Базы данных</h3>
+                        <p>SQL, проектирование БД, оптимизация</p>
+                        <p><strong>Преподаватель:</strong> Проф. Петрова С.И.</p>
+                        <a href="#" class="btn-subject">Изучать</a>
+                    </div>
+                </div>
+                <div class="subject-card">
+                    <div class="subject-icon">
+                        <i class="fas fa-sitemap"></i>
+                    </div>
+                    <div class="subject-content">
+                        <h3>Алгоритмы</h3>
+                        <p>Структуры данных, сложность алгоритмов</p>
+                        <p><strong>Преподаватель:</strong> Проф. Сидоров В.П.</p>
+                        <a href="#" class="btn-subject">Изучать</a>
+                    </div>
+                </div>
+                <div class="subject-card">
+                    <div class="subject-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <div class="subject-content">
+                        <h3>Веб-разработка</h3>
+                        <p>HTML, CSS, JavaScript, фреймворки</p>
+                        <p><strong>Преподаватель:</strong> Ст. преп. Козлов Е.Н.</p>
+                        <a href="#" class="btn-subject">Изучать</a>
+                    </div>
+                </div>
+                <div class="subject-card">
+                    <div class="subject-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="subject-content">
+                        <h3>Кибербезопасность</h3>
+                        <p>Защита информации, криптография</p>
+                        <p><strong>Преподаватель:</strong> Доц. Иванов А.А.</p>
+                        <a href="#" class="btn-subject">Изучать</a>
+                    </div>
+                </div>
+                <div class="subject-card">
+                    <div class="subject-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="subject-content">
+                        <h3>Анализ данных</h3>
+                        <p>Статистика, визуализация, ML</p>
+                        <p><strong>Преподаватель:</strong> Доц. Смирнова О.В.</p>
+                        <a href="#" class="btn-subject">Изучать</a>
+                    </div>
+                </div>
+                <div class="subject-card">
+                    <div class="subject-icon">
+                        <i class="fas fa-language"></i>
+                    </div>
+                    <div class="subject-content">
+                        <h3>Иностранный язык</h3>
+                        <p>Английский для IT-специалистов</p>
+                        <p><strong>Преподаватель:</strong> Преп. Попова Л.М.</p>
+                        <a href="#" class="btn-subject">Изучать</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="study-timer" id="timer">
+        <div class="container">
+            <h2 class="section-title">⏰ Таймер Pomodoro</h2>
+            <div class="timer-container">
+                <h3>Техника Pomodoro</h3>
+                <p>25 минут учебы + 5 минут отдыха</p>
+                <div class="timer-display" id="timerDisplay">25:00</div>
+                <div class="timer-controls">
+                    <button class="timer-btn start" id="startTimer">
+                        <i class="fas fa-play"></i> Начать
+                    </button>
+                    <button class="timer-btn pause" id="pauseTimer">
+                        <i class="fas fa-pause"></i> Пауза
+                    </button>
+                    <button class="timer-btn reset" id="resetTimer">
+                        <i class="fas fa-redo"></i> Сбросить
+                    </button>
+                </div>
+                <p id="timerStatus" style="margin-top: 20px; color: #666;">Готов к занятиям!</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="flashcards" id="flashcards">
+        <div class="container">
+            <h2 class="section-title">🃏 Учебные карточки</h2>
+            <div class="flashcard-container">
+                <div class="flashcard" id="flashcard">
+                    <div class="flashcard-front">
+                        <p id="cardFront">Что такое SQL?</p>
+                    </div>
+                    <div class="flashcard-back">
+                        <p id="cardBack">Structured Query Language - язык структурированных запросов для работы с базами данных</p>
+                    </div>
+                </div>
+                <div class="flashcard-controls">
+                    <button class="btn-subject" id="prevCard">
+                        <i class="fas fa-chevron-left"></i> Назад
+                    </button>
+                    <button class="btn-subject" id="flipCard">
+                        <i class="fas fa-sync-alt"></i> Перевернуть
+                    </button>
+                    <button class="btn-subject" id="nextCard">
+                        Вперед <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+                <p style="text-align: center; margin-top: 20px;">
+                    <strong>Карточка:</strong> <span id="cardCounter">1</span>/<span id="totalCards">5</span>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="student-photo-section" id="photo">
+        <div class="container">
+            <h2 class="section-title">👨‍🎓 Студент РУДН</h2>
+            <div class="photo-container">
+                <div class="photo-frame" id="photoFrame">
+                    <i class="fas fa-user-graduate"></i>
+                </div>
+            </div>
+            <input type="file" id="photoUpload" accept="image/*" style="display: none;">
+            <button class="upload-btn" onclick="document.getElementById('photoUpload').click()">
+                <i class="fas fa-camera"></i> Загрузить свою фотографию
+            </button>
+            <p style="margin-top: 15px; color: #666;">
+                Жозе Рамос Домингуш | Группа: НПИбд-03-24 | 2 курс
+            </p>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>StudyHub RUDN</h3>
+                    <p>Учебный портал для студентов РУДН</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Студент</h3>
+                    <ul>
+                        <li>Жозе Рамос Домингуш</li>
+                        <li>Группа: НПИбд-03-24</li>
+                        <li>2 курс бакалавриата</li>
+                        <li>Прикладная информатика</li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Контакты РУДН</h3>
+                    <ul>
+                        <li>Москва, ул. Миклухо-Маклая, 6</li>
+                        <li>+7 (495) 433-40-00</li>
+                        <li><a href="https://www.rudn.ru" target="_blank">www.rudn.ru</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2024 StudyHub RUDN. | Жозе Рамос Домингуш, группа НПИбд-03-24</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const menuBtn = document.getElementById('menuBtn');
+        const mainNav = document.getElementById('mainNav');
+        
+        menuBtn.addEventListener('click', () => {
+            mainNav.classList.toggle('active');
+        });
+
+        let timerInterval;
+        let timerRunning = false;
+        let timerSeconds = 25 * 60;
+        
+        const timerDisplay = document.getElementById('timerDisplay');
+        const startTimerBtn = document.getElementById('startTimer');
+        const pauseTimerBtn = document.getElementById('pauseTimer');
+        const resetTimerBtn = document.getElementById('resetTimer');
+        const timerStatus = document.getElementById('timerStatus');
+        
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timerSeconds / 60);
+            const seconds = timerSeconds % 60;
+            timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+        
+        function startTimer() {
+            if (timerRunning) return;
+            
+            timerRunning = true;
+            timerStatus.textContent = "Учимся! Сосредоточься!";
+            timerStatus.style.color = "#4caf50";
+            
+            timerInterval = setInterval(() => {
+                timerSeconds--;
+                updateTimerDisplay();
+                
+                if (timerSeconds <= 0) {
+                    clearInterval(timerInterval);
+                    timerRunning = false;
+                    timerStatus.textContent = "Время вышло! Отдохни 5 минут.";
+                    timerStatus.style.color = "#ff9800";
+                    
+                    try {
+                        const audio = new Audio('data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEAQB8AAEAfAAABAAgAZGF0YQ');
+                        audio.play();
+                    } catch (e) {
+                        console.log("Audio not supported");
+                    }
+                    
+                    alert("Время занятия закончилось!\nСделайте перерыв 5 минут.");
+                    
+                    timerSeconds = 5 * 60;
+                    updateTimerDisplay();
+                }
+            }, 1000);
+        }
+        
+        function pauseTimer() {
+            clearInterval(timerInterval);
+            timerRunning = false;
+            timerStatus.textContent = "Пауза";
+            timerStatus.style.color = "#ff9800";
+        }
+        
+        function resetTimer() {
+            clearInterval(timerInterval);
+            timerRunning = false;
+            timerSeconds = 25 * 60;
+            updateTimerDisplay();
+            timerStatus.textContent = "Готов к занятиям!";
+            timerStatus.style.color = "#666";
+        }
+        
+        startTimerBtn.addEventListener('click', startTimer);
+        pauseTimerBtn.addEventListener('click', pauseTimer);
+        resetTimerBtn.addEventListener('click', resetTimer);
+        
+        updateTimerDisplay();
+
+        const flashcard = document.getElementById('flashcard');
+        const flipCardBtn = document.getElementById('flipCard');
+        const prevCardBtn = document.getElementById('prevCard');
+        const nextCard
